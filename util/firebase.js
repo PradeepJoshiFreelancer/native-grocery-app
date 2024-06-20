@@ -7,14 +7,14 @@ const BASE_URL =
   // const BASE_URL =
   // "https://grocery-app-test-b926e-default-rtdb.asia-southeast1.firebasedatabase.app";
 
-export async function storeGroceryItem(groceryItem) {
-  const response = await axios.post(BASE_URL + "/grocery.json", groceryItem);
+export async function storeGroceryItem(groceryItem, dbName) {
+  const response = await axios.post(BASE_URL + "/" + dbName +".json", groceryItem);
   const id = response.data.name;
   return id;
 }
 
-export async function fetchGroceryItems() {
-  const response = await axios.get(BASE_URL + "/grocery.json");
+export async function fetchGroceryItems(dbName) {
+  const response = await axios.get(BASE_URL + "/" + dbName + ".json");
 
   const groceryItems = [];
 
@@ -35,11 +35,11 @@ export async function fetchGroceryItems() {
   return groceryItems;
 }
 
-export function updateItem(id, groceryItem) {
+export function updateItem(id, groceryItem, dbName) {
   // console.log(JSON.stringify(groceryItem));
-  return axios.put(BASE_URL + `/grocery/${id}.json`, groceryItem);
+  return axios.put(BASE_URL + `/${dbName}/${id}.json`, groceryItem);
 }
 
-export function deleteGroceryItem(id) {
-  return axios.delete(BASE_URL + `/grocery/${id}.json`);
+export function deleteGroceryItem(id, dbName) {
+  return axios.delete(BASE_URL + `/${dbName}/${id}.json`);
 }

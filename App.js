@@ -10,6 +10,7 @@ import CategoryList from "./screens/CategoryList";
 import { GlobalStyles } from "./data/GlobalStyles";
 import { Provider } from "react-redux";
 import store from "./store";
+import ShopList from "./screens/ShopList";
 
 const BottomTab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -41,6 +42,16 @@ const BottomNavigator = () => {
               <Ionicons name="add" size={24} color={tintColor} />
             </Pressable>
           ),
+          headerLeft: ({ tintColor }) => (
+            <Pressable
+              style={{ margin: 12 }}
+              onPress={() => {
+                navigation.navigate("ShopList");
+              }}
+            >
+              <Ionicons name="arrow-back" size={24} color={tintColor} />
+            </Pressable>
+          ),
           tabBarLabel: "Item List",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" color={color} size={size} />
@@ -50,11 +61,21 @@ const BottomNavigator = () => {
       <BottomTab.Screen
         name="Cart"
         component={CartList}
-        options={{
+        options={({navigation}) => ({
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="cart" color={color} size={size} />
           ),
-        }}
+          headerLeft: ({ tintColor }) => (
+            <Pressable
+              style={{ margin: 12 }}
+              onPress={() => {
+                navigation.navigate("ShopList");
+              }}
+            >
+              <Ionicons name="arrow-back" size={24} color={tintColor} />
+            </Pressable>
+          ),
+        })}
       />
     </BottomTab.Navigator>
   );
@@ -70,8 +91,10 @@ export default function App() {
             screenOptions={{
               headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
               headerTintColor: "white",
+              contentStyle: { backgroundColor: GlobalStyles.colors.primary700 },
             }}
           >
+            <Stack.Screen name="ShopList" component={ShopList} />
             <Stack.Screen
               name="GroceryList"
               component={BottomNavigator}

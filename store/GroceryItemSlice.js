@@ -3,20 +3,22 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialValues = {
   groceryItemsList: [],
   unsavedItemList: [],
+  dbName: "",
 };
 const goceryItemSlice = createSlice({
   name: "groceryItems",
   initialState: initialValues,
   reducers: {
     updateGroceryItemList(state, action) {
-      const updatedGroceryItemsList = action.payload;
+      const updatedGroceryItemsList = action.payload.items;
       state.groceryItemsList = updatedGroceryItemsList;
+      state.dbName = action.payload.dbName;
+      state.unsavedItemList = [];
       // console.log(JSON.stringify(state));
     },
     addItemList(state, action) {
       const updatedItemList = [...state.groceryItemsList, action.payload];
       state.groceryItemsList = updatedItemList;
-      // state.groceryItemsList.push(action.payload);
       // console.log(JSON.stringify(state.groceryItemsList));
     },
     updateItem(state, action) {
@@ -47,6 +49,7 @@ const goceryItemSlice = createSlice({
       );
       const updatedGroceryItems = [...state.groceryItemsList];
       updatedGroceryItems[updateItemIndex].amount = action.payload.amount;
+      updatedGroceryItems[updateItemIndex].isChecked = false;
       state.groceryItemsList = updatedGroceryItems;
 
       const updateUnsavedItemIndex = state.unsavedItemList.findIndex(
@@ -58,14 +61,13 @@ const goceryItemSlice = createSlice({
           updatedGroceryItems[updateItemIndex],
         ];
         state.unsavedItemList = updatedUnsavedList;
-        // state.unsavedItemList.push(action.payload);
       } else {
         const updatedUnsavedItems = [...state.unsavedItemList];
         updatedUnsavedItems[updateUnsavedItemIndex].amount =
           action.payload.amount;
         state.unsavedItemList = updatedUnsavedItems;
       }
-      // console.log(JSON.stringify(state.unsavedItemList))
+      // console.log(JSON.stringify(state.unsavedItemList));
 
       // state.groceryItemsList[updateItemIndex].amount = action.payload.amount;
     },

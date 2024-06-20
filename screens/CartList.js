@@ -15,6 +15,7 @@ function CartList({ navigation }) {
   const unsavedItemList = useSelector(
     (state) => state.groceryItems.unsavedItemList
   );
+  const dbName = useSelector((state) => state.groceryItems.dbName);
   const dispatch = useDispatch();
 
   let formattedCartList = userSelectedList.filter((item) => item.amount > 0);
@@ -51,16 +52,9 @@ function CartList({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
-  if (itemCount === 0) {
-    return (
-      <View style={styles.messageContainer}>
-        <Text style={styles.message}>There are no items in the cart!</Text>
-      </View>
-    );
-  }
   const onSaveItem = async () => {
     setIsLoading(true);
-    const error = await saveUnsavedList(unsavedItemList);
+    const error = await saveUnsavedList(unsavedItemList, dbName);
     setError(error);
     setIsLoading(false);
     dispatch(groceryItemsAction.resetUnsavedItemList());
@@ -76,7 +70,6 @@ function CartList({ navigation }) {
         dispatch(
           groceryItemsAction.updateItemAmount({ id: item.id, amount: 0 })
         );
-        // dispatch(groceryItemsAction.updateUnsavedItemList({ id: item.id }));
       }
     });
   };
@@ -92,7 +85,18 @@ function CartList({ navigation }) {
   if (isLoading) {
     return <LoadingOverlay />;
   }
-
+  if (itemCount === 0) {
+    return (
+      <View style={styles.messageContainer}>
+        <Text style={styles.message}>There are no items in the cart!</Text>
+        {showSaveButton && (
+          <Button style={styles.button} onPress={onSaveItem}>
+            Save Unsaved Items
+          </Button>
+        )}
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <FlatList

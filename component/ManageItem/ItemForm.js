@@ -9,7 +9,6 @@ import SearchableDrop from "../UI/SearchableDrop";
 import { findCategory, findUnitQuantity } from "../../util/utility";
 
 function ItemForm({ onCancel, label, onSubmitHandler, defaultValues }) {
-
   const [inputs, setInputs] = useState({
     itemName: {
       value: defaultValues ? defaultValues.itemName : "",
@@ -22,11 +21,13 @@ function ItemForm({ onCancel, label, onSubmitHandler, defaultValues }) {
     defaultUnitQuantity: {
       value: defaultValues
         ? findUnitQuantity(defaultValues.defaultUnitQuantity)
-        :  {"label": "", "value": ""},
+        : { label: "", value: "" },
       isValid: true,
     },
     category: {
-      value: defaultValues ? findCategory(defaultValues.category) : {"label": "", "value": ""},
+      value: defaultValues
+        ? findCategory(defaultValues.category)
+        : { label: "", value: "" },
       isValid: true,
     },
   });
@@ -106,7 +107,7 @@ function ItemForm({ onCancel, label, onSubmitHandler, defaultValues }) {
         label="Description"
         textInputConfig={{
           autoCorrect: false,
-          autoCapitalize: "none",
+          // autoCapitalize: "none",
           onChangeText: inputChangeHandller.bind(this, "itemName"),
           value: inputs.itemName.value,
         }}

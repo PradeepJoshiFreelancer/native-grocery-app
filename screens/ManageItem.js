@@ -22,6 +22,7 @@ function ManageItem({ navigation, route }) {
   const groceryItems = useSelector(
     (state) => state.groceryItems.groceryItemsList
   );
+  const dbName = useSelector((state) => state.groceryItems.dbName);
 
   const cancelButtonHandller = () => {
     navigation.goBack();
@@ -42,7 +43,7 @@ function ManageItem({ navigation, route }) {
   const onConfirmHandller = async (groceryItem) => {
     try {
       if (isEditing) {
-        await updateItem(editedGroceryItemId, groceryItem);
+        await updateItem(editedGroceryItemId, groceryItem, dbName);
         dispatch(
           groceryItemsAction.updateItem({
             id: editedGroceryItemId,
@@ -51,8 +52,14 @@ function ManageItem({ navigation, route }) {
           })
         );
       } else {
-        const id = await storeGroceryItem(groceryItem);
-        dispatch(groceryItemsAction.addItemList({ ...groceryItem, isChecked: false, id: id }));
+        const id = await storeGroceryItem(groceryItem, dbName);
+        dispatch(
+          groceryItemsAction.addItemList({
+            ...groceryItem,
+            isChecked: false,
+            id: id,
+          })
+        );
       }
       navigation.goBack();
     } catch {
@@ -62,7 +69,7 @@ function ManageItem({ navigation, route }) {
   const deleteButtonHandller = async () => {
     setIsLoading(true);
     try {
-      await deleteGroceryItem(editedGroceryItemId);
+      await deleteGroceryItem(editedGroceryItemId, dbName);
       dispatch(groceryItemsAction.removeItem(editedGroceryItemId));
       setIsLoading(false);
       navigation.goBack();

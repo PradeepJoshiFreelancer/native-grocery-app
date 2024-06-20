@@ -85,7 +85,7 @@ export const findCategory = (category) => {
   return CATEGORY_LIST.find((item) => item.name === category);
 };
 
-export const saveUnsavedList = async (unsavedList) => {
+export const saveUnsavedList = async (unsavedList, dbName) => {
   for (let i = 0; i < unsavedList.length; i++) {
     const userItem = {
       category: unsavedList[i].category,
@@ -97,7 +97,7 @@ export const saveUnsavedList = async (unsavedList) => {
       amount: unsavedList[i].amount,
     };
     try {
-      await updateItem(unsavedList[i].id, userItem);
+      await updateItem(unsavedList[i].id, userItem, dbName);
     } catch {
       // console.log({ error: "Error occured while saving unsaved List!" });
       return { error: "Error occured while saving unsaved List!" };
